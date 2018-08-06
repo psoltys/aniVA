@@ -1,0 +1,20 @@
+  <div *ngFor="let character of animeCharacters">
+    <mat-card>
+      <img [src]='character.node.image.medium' [title]='character.node.name.first'> {{character.node.name.first}} {{character.node.name.last}}
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            VAs
+          </mat-panel-title>
+          <mat-panel-description>
+              Click to see Voice Actors
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+          <div *ngFor="let actor of character.voiceActors">
+          {{actor.language}} {{actor.name.last}} {{actor.name.first}}
+          </div>
+        
+      </mat-expansion-panel>
+    </mat-card>
+</div>

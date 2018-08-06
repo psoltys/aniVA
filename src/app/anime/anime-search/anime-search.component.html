@@ -1,0 +1,24 @@
+ <div class='card-body'>
+    <div class='row'>
+              <form class="example-form">
+                <mat-form-field class="example-full-width">
+                  <input matInput
+                  type="text" 
+                  placeholder="Anime tile"  
+                  [formControl]="myControl" 
+                  [matAutocomplete]="auto">
+                  
+                  <mat-autocomplete 
+                  #auto="matAutocomplete" 
+                  (optionSelected)='onTitleClicked($event.option.value)' [displayWith]="displayFn">
+                    
+                  <mat-option *ngFor="let option of filteredOptions | async" 
+                   [value]="option">
+                   {{option.title.userPreferred}} 
+                    </mat-option>
+                  
+                  </mat-autocomplete>
+                </mat-form-field>
+              </form>
+    </div>
+    </div>

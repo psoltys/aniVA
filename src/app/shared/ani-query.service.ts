@@ -18,11 +18,17 @@ query($title: String) {
   }
 }`;
 
-//TODO - add Pagination
 const vaQuery = gql`
-query ($id: Int) {
+query ($id: Int, $page: Int) {
   Media(id: $id, type: ANIME) {
-    characters {
+    characters(page:$page) {
+      pageInfo {
+        total
+        currentPage
+        lastPage
+        hasNextPage
+        perPage
+      }
       edges {
         node {
           name {
@@ -35,7 +41,7 @@ query ($id: Int) {
             medium
           }
         }
-        voiceActors {
+        voiceActors(sort:LANGUAGE) {
           language
           name {
             first
@@ -51,11 +57,13 @@ query ($id: Int) {
     }
   }
 }`;
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AniQueryService {
-
+  queryRef: QueryRef<any>;
   constructor(private apollo: Apollo) { }
 
   GetAnime(value: any): QueryRef<any> {
@@ -67,14 +75,40 @@ export class AniQueryService {
     })
   }
 
-  getCharacters(message: any): QueryRef<any>{
-    return this.apollo.watchQuery<any>({
+  getCharacters(message: any,page:any): QueryRef<any>{
+    this.queryRef = this.apollo.watchQuery<any>({
       query: vaQuery,
       variables: {
-        id:message
+        id:message,
+        page:page
       },
-    })
+      fetchPolicy: 'network-only',
+    });
+    return this.queryRef;
 }
+
+fetchMore(animeID: any, page:number) {
+  this.queryRef.fetchMore({
+    // query: ... (you can specify a different query. feedQuery is used by default)
+    variables: {
+      page: page,
+      id:animeID
+    },
+    // We are able to figure out which offset to use because it matches
+    // the feed length, but we could also use state, or the previous
+    // variables to calculate this (see the cursor example below)
+    updateQuery: (prev, { fetchMoreResult }) => {
+      // console.log('FETCH MORE START');
+      if (!fetchMoreResult) { return prev; }
+      // console.log('FETCH MORE updateQuery() start', fetchMoreResult);
+      return fetchMoreResult;
+      //console.log('FETCH MORE updateQuery() obj updated', updatedObj);
+        },
+  }).then(
+    () => console.log('FETCH MORE FINISHED')
+  );
+}
+
 }
 
 

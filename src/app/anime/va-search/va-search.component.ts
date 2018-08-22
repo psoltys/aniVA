@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, ParamMap, NavigationEnd } from '@angular/router';
 import { validate } from 'graphql';
 import { switchMap } from '../../../../node_modules/rxjs/operators';
+import { QueryRef } from '../../../../node_modules/apollo-angular';
 
 @Component({
   selector: 'app-va-search',
@@ -12,12 +13,16 @@ import { switchMap } from '../../../../node_modules/rxjs/operators';
 })
 export class VaSearchComponent implements OnInit {
 
-  private querySubscription: Subscription;
+  queryRef: QueryRef<any>;
+  querySub: Subscription;
   loading: boolean;
   id: string;
-  animeCharacters: Observable<any[]>;
-  animeVAs: Observable<any[]>;
+  title: string;
+  animeCharacters: any[];
   navigationSubscription;
+  page:any;
+  isLastPage:Boolean;
+  isDifferentAnime:Boolean;
 
   constructor(private animeService: AniQueryService,
     private route: ActivatedRoute,
@@ -34,17 +39,15 @@ export class VaSearchComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = params.get('id');
+      this.title = params.get('title');
     });
-    console.log("dupa:::" + this.id)
     this.vaSearch(this.id)
   }
 
   // ngOnChanges() { this.ngOnInit() }
 
   ngOnDestroy() {
-    // avoid memory leaks here by cleaning up after ourselves. If we  
-    // don't then we will continue to run our initialiseInvites()   
-    // method on every navigationEnd event.
+    this.querySub.unsubscribe();
     if (this.navigationSubscription) {
       this.navigationSubscription.unsubscribe();
     }
@@ -54,16 +57,32 @@ export class VaSearchComponent implements OnInit {
   }
 
   vaSearch(animeID: any) {
-    console.log(animeID);
-    this.querySubscription = this.animeService.getCharacters(animeID)
+    this.isDifferentAnime=true;
+    this.queryRef = this.animeService.getCharacters(animeID,0);
+    if(this.querySub){
+      this.querySub.unsubscribe();
+    }
+
+    this.querySub=this.queryRef
       .valueChanges
       .subscribe(({ data, loading }) => {
+        console.log('VALUES CHANGES DETECTED', data);
         this.loading = loading;
-        this.animeCharacters = data.Media.characters.edges;
-        this.animeVAs = data.Media.characters.edges.voiceActors;
-        console.log(this.animeCharacters);
-
+        this.page=data.Media.characters.pageInfo.currentPage;
+        this.isLastPage=data.Media.characters.pageInfo.hasNextPage;
+        console.log(this.page);
+        if(!this.isDifferentAnime){
+          this.animeCharacters=[...this.animeCharacters, ...data.Media.characters.edges]
+        }
+        else{
+          this.animeCharacters=data.Media.characters.edges
+        }
       });
   }
 
+  fetchMore(animeID: any) {
+    this.isDifferentAnime=false;
+    console.log("page : "+ this.page)
+    console.log(this.animeService.fetchMore(animeID, this.page+1));
+  }
 }

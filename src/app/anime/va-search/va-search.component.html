@@ -1,6 +1,8 @@
-  <div *ngFor="let character of animeCharacters">
+  <div class="card" *ngFor="let character of animeCharacters">
     <mat-card>
-      <img [src]='character.node.image.medium' [title]='character.node.name.first'> {{character.node.name.first}} {{character.node.name.last}}
+      <img [src]='character.node.image.medium' [title]='character.node.name.first'> 
+      {{character.node.name.first}} {{character.node.name.last}} 
+      {{character.voiceActors[0].name.first}} {{character.voiceActors[0].name.last}}
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -17,4 +19,7 @@
         
       </mat-expansion-panel>
     </mat-card>
+    
 </div>
+
+<a *ngIf="isLastPage" (click)="fetchMore(id)">Load more</a>

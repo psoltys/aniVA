@@ -36,7 +36,6 @@ export class AnimeSearchComponent implements OnInit {
   private _filterAmino(value: any): any[] {
     let filterValue = value;
     if(JSON.stringify(value).search("id")!=-1){
-      console.log(JSON.stringify(value))
       filterValue = value.title.romaji;
     }
     
@@ -51,8 +50,7 @@ export class AnimeSearchComponent implements OnInit {
   }
 
   onTitleClicked(message: any): void{
-    console.log("dupa")
-    let id = message.id
+    let id = message.id;
     this.router.navigate(['anime', id]);
 }
 displayFn(anime: any): string {

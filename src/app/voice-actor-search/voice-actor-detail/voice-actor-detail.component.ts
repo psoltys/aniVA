@@ -1,47 +1,47 @@
 import { Component, OnInit } from '@angular/core';
+import { QueryRef } from 'apollo-angular';
+import { Subscription } from 'rxjs';
 import { AniQueryService } from '../../shared/ani-query.service';
-import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute, Router, ParamMap, NavigationEnd } from '@angular/router';
-import { validate } from 'graphql';
-import { switchMap } from '../../../../node_modules/rxjs/operators';
-import { QueryRef } from '../../../../node_modules/apollo-angular';
+import { ActivatedRoute, Router, NavigationEnd, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'app-va-search',
-  templateUrl: './va-search.component.html',
-  styleUrls: ['./va-search.component.css']
+  selector: 'app-voice-actor-detail',
+  templateUrl: './voice-actor-detail.component.html',
+  styleUrls: ['./voice-actor-detail.component.css']
 })
-export class VaSearchComponent implements OnInit {
+export class VoiceActorDetailComponent implements OnInit {
 
+  navigationSubscription;
   queryRef: QueryRef<any>;
   querySub: Subscription;
+  animeCharacters: any[];
+  page:any;
+  voiceActor: any;
   loading: boolean;
+  isLastPage:boolean;
+  isDifferentAnime:boolean;
   id: string;
   title: string;
-  animeCharacters: any[];
-  navigationSubscription;
-  page:any;
-  isLastPage:Boolean;
-  isDifferentAnime:Boolean;
-
+  imageWidth: number = 150;
+  imageMargin: number = 0;
+  
   constructor(private animeService: AniQueryService,
     private route: ActivatedRoute,
     private router: Router) {
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
       // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
-
-        this.ngOnInit();
+         this.ngOnInit();
       }
     })
   }
 
   ngOnInit() {
+    console.log("voice page");
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = params.get('id');
-      this.title = params.get('title');
     });
-    this.vaSearch(this.id)
+    this.vaDetailSearch(this.id)
   }
 
   // ngOnChanges() { this.ngOnInit() }
@@ -52,13 +52,14 @@ export class VaSearchComponent implements OnInit {
       this.navigationSubscription.unsubscribe();
     }
   }
+
   onBack(): void {
     this.router.navigate(['']);
   }
 
-  vaSearch(animeID: any) {
+  vaDetailSearch(vaID: any) {
     this.isDifferentAnime=true;
-    this.queryRef = this.animeService.getCharacters(animeID,0);
+    this.queryRef = this.animeService.GetVADetails(vaID,0);
     if(this.querySub){
       this.querySub.unsubscribe();
     }
@@ -68,14 +69,15 @@ export class VaSearchComponent implements OnInit {
       .subscribe(({ data, loading }) => {
         console.log('VALUES CHANGES DETECTED', data);
         this.loading = loading;
-        this.page=data.Media.characters.pageInfo.currentPage;
-        this.isLastPage=data.Media.characters.pageInfo.hasNextPage;
+        this.page=data.Staff.characters.pageInfo.currentPage;
+        this.voiceActor=data.Staff;
+        this.isLastPage=!data.Staff.characters.pageInfo.hasNextPage;
         console.log(this.page);
         if(!this.isDifferentAnime){
-          this.animeCharacters=[...this.animeCharacters, ...data.Media.characters.edges]
+          this.animeCharacters=[...this.animeCharacters, ...data.Staff.characters.edges]
         }
         else{
-          this.animeCharacters=data.Media.characters.edges
+          this.animeCharacters=data.Staff.characters.edges
         }
       });
   }

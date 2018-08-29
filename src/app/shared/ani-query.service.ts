@@ -1,63 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
-import { Subscription } from 'rxjs';
-import gql from 'graphql-tag';
-
-const aniQuery = gql`
-query($title: String) {
-  Page{
-  media(search:$title, type: ANIME){
-    id
-    title{
-      romaji
-      english
-      native
-      userPreferred
-    }
-  }
-  }
-}`;
-
-const vaQuery = gql`
-query ($id: Int, $page: Int) {
-  Media(id: $id, type: ANIME) {
-    characters(page:$page) {
-      pageInfo {
-        total
-        currentPage
-        lastPage
-        hasNextPage
-        perPage
-      }
-      edges {
-        node {
-          name {
-            first
-            last
-            native
-          }
-          image {
-            large
-            medium
-          }
-        }
-        voiceActors(sort:LANGUAGE) {
-          language
-          name {
-            first
-            last
-            native
-          }
-          image {
-            large
-            medium
-          }
-        }
-      }
-    }
-  }
-}`;
-
+import { aniQuery,vaQuery, vaSearch, vaDetail } from './query.graphql';
 
 @Injectable({
   providedIn: 'root'
@@ -75,11 +18,32 @@ export class AniQueryService {
     })
   }
 
-  getCharacters(message: any,page:any): QueryRef<any>{
+  GetVA(value: any): QueryRef<any> {
+    return this.apollo.watchQuery<any>({
+      query: vaSearch,
+      variables: {
+        name:value,
+      },
+    })
+  }
+
+  GetVADetails(id: any,page:any): QueryRef<any> {
+    this.queryRef =  this.apollo.watchQuery<any>({
+      query: vaDetail,
+      variables: {
+        id:id,
+        page:page
+      },
+      fetchPolicy: 'network-only',
+    })
+    return this.queryRef;
+  }
+
+  getCharacters(id: any,page:any): QueryRef<any>{
     this.queryRef = this.apollo.watchQuery<any>({
       query: vaQuery,
       variables: {
-        id:message,
+        id:id,
         page:page
       },
       fetchPolicy: 'network-only',
@@ -89,14 +53,28 @@ export class AniQueryService {
 
 fetchMore(animeID: any, page:number) {
   this.queryRef.fetchMore({
-    // query: ... (you can specify a different query. feedQuery is used by default)
     variables: {
       page: page,
       id:animeID
     },
-    // We are able to figure out which offset to use because it matches
-    // the feed length, but we could also use state, or the previous
-    // variables to calculate this (see the cursor example below)
+    updateQuery: (prev, { fetchMoreResult }) => {
+      // console.log('FETCH MORE START');
+      if (!fetchMoreResult) { return prev; }
+      // console.log('FETCH MORE updateQuery() start', fetchMoreResult);
+      return fetchMoreResult;
+      //console.log('FETCH MORE updateQuery() obj updated', updatedObj);
+        },
+  }).then(
+    () => console.log('FETCH MORE FINISHED')
+  );
+}
+
+fetchMoreRoles(animeID: any, page:number) {
+  this.queryRef.fetchMore({
+    variables: {
+      page: page,
+      id:animeID
+    },
     updateQuery: (prev, { fetchMoreResult }) => {
       // console.log('FETCH MORE START');
       if (!fetchMoreResult) { return prev; }

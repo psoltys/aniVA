@@ -12,17 +12,22 @@ import { AnimeSearchComponent } from './anime/anime-search/anime-search.componen
 import {MatButtonModule, MatCheckboxModule, MatInputModule, MatOptionModule, MatAutocompleteModule, MatToolbar, MatToolbarModule, MatCardModule, MatExpansionModule, MatSelectModule} from '@angular/material';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
-import { VaSearchComponent } from './anime/va-search/va-search.component';
 import { HomeComponent } from './home/home.component';
 import{RouterModule} from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { VoiceActorSearchComponent } from './voice-actor-search/voice-actor-search/voice-actor-search.component';
+import { VoiceActorDetailComponent } from './voice-actor-search/voice-actor-detail/voice-actor-detail.component';
+import { AnimeDetailSearchComponent } from './anime/anime-detail-search/anime-detail-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AnimeSearchComponent,
     ToolbarComponent,
-    VaSearchComponent,
-    HomeComponent
+    AnimeDetailSearchComponent,
+    HomeComponent,
+    VoiceActorSearchComponent,
+    VoiceActorDetailComponent
   ],
   imports: [
     RouterModule.forRoot([
@@ -30,7 +35,9 @@ import{RouterModule} from '@angular/router';
       { path: '', redirectTo: 'va', pathMatch:'full' },
       { path: '**', redirectTo: 'va', pathMatch:'full' },
       { path: 'va/:id', redirectTo:'anime/:id'},
-      { path: 'anime/:id', component: VaSearchComponent, runGuardsAndResolvers:'paramsChange'}
+      { path: 'anime/:id', component: AnimeDetailSearchComponent, runGuardsAndResolvers:'paramsChange'},
+      { path: 'voice/:id', redirectTo:'anime/:id'},
+      { path: 'voiceactor/:id', component: VoiceActorDetailComponent, runGuardsAndResolvers:'paramsChange'}
     ], {onSameUrlNavigation:'reload'}),
     BrowserModule,
     ApolloModule,
@@ -47,7 +54,8 @@ import{RouterModule} from '@angular/router';
     MatToolbarModule,
     MatCardModule,
     MatExpansionModule,
-    MatSelectModule
+    MatSelectModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

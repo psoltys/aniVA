@@ -31,6 +31,7 @@
     "core-js": "^2.5.4",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "ngx-infinite-scroll": "^6.0.1",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.2.2",
     "zone.js": "^0.8.26"

@@ -1,0 +1,39 @@
+ <div infiniteScroll
+ [infiniteScrollDistance]="1"
+ [infiniteScrollThrottle]="50"
+ [infiniteScrollDisabled]="isLastPage"
+ (scrolled)="fetchMore(id)">
+ <div class="card" *ngFor="let character of animeCharacters">
+    <mat-card>
+      <div class="char-card">
+      <div>
+      <img [src]='character.node.image.medium' [title]='character.node.name.first' 
+      [style.height.px]='imageWidth'> 
+      {{character.node.name.first}} {{character.node.name.last}} 
+    </div>
+    <div *ngIf="character.voiceActors[0]">
+      {{character.voiceActors[0].name.first}} {{character.voiceActors[0].name.last}}
+      <img [src]='character.voiceActors[0].image.medium' [title]='character.voiceActors[0].name.first'
+      [style.height.px]='imageWidth'
+      [style.margin.px]='imageMargin'> 
+    </div>
+  </div>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            VAs
+          </mat-panel-title>
+          <mat-panel-description>
+              Click to see All Voice Actors
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+          <div *ngFor="let actor of character.voiceActors">
+          {{actor.language}} {{actor.name.last}} {{actor.name.first}}
+          </div>
+        
+      </mat-expansion-panel>
+    </mat-card>
+    
+</div>
+</div>

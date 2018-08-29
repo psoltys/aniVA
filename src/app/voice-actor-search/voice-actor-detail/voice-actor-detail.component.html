@@ -1,0 +1,42 @@
+<div infiniteScroll
+[infiniteScrollDistance]="1"
+[infiniteScrollThrottle]="50"
+[infiniteScrollDisabled]="isLastPage"
+(scrolled)="fetchMore(id)">
+<div>
+    <mat-card>
+        <img [src]='voiceActor.image.large' [title]='voiceActor.name.last' 
+        [style.height.px]='imageWidth'>
+        {{voiceActor.name.first}} {{voiceActor.name.last}}
+        {{voiceActor.description}}
+    </mat-card>
+ </div>
+<div class="card" *ngFor="let character of animeCharacters">
+   <mat-card>
+     <div class="char-card">
+     <div>
+      <p> {{character.node.name.first}} {{character.node.name.last}} </p> 
+      <p> {{character.node.media.nodes[0].title.userPreferred}}</p> 
+     <img [src]='character.node.image.medium' [title]='character.node.name.first' 
+     [style.height.px]='imageWidth'>
+   </div>
+ </div>
+     <mat-expansion-panel>
+       <mat-expansion-panel-header>
+         <mat-panel-title>
+           Titles
+         </mat-panel-title>
+         <mat-panel-description>
+             Click to see Media Roles
+         </mat-panel-description>
+       </mat-expansion-panel-header>
+       
+         <div *ngFor="let series of character.node.media.nodes">
+         {{series.title.userPreferred}}
+         </div>
+       
+     </mat-expansion-panel>
+   </mat-card>
+   
+</div>
+</div>

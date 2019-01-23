@@ -79,7 +79,7 @@ query ($id: Int, $page: Int) {
       }
     }
   }
-}`
+}`;
 
 export const vaQuery = gql`
 query ($id: Int, $page: Int) {

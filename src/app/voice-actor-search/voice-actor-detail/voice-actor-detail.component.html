@@ -16,7 +16,7 @@
      <div class="char-card">
      <div>
       <p> {{character.node.name.first}} {{character.node.name.last}} </p> 
-      <p> {{character.node.media.nodes[0].title.userPreferred}}</p> 
+      <p *ngIf="character.node.media.nodes[0]" > {{character.node.media.nodes[0].title.userPreferred}}</p> 
      <img [src]='character.node.image.medium' [title]='character.node.name.first' 
      [style.height.px]='imageWidth'>
    </div>

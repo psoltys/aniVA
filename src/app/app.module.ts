@@ -18,6 +18,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { VoiceActorSearchComponent } from './voice-actor-search/voice-actor-search/voice-actor-search.component';
 import { VoiceActorDetailComponent } from './voice-actor-search/voice-actor-detail/voice-actor-detail.component';
 import { AnimeDetailSearchComponent } from './anime/anime-detail-search/anime-detail-search.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { AnimeDetailSearchComponent } from './anime/anime-detail-search/anime-de
     MatCardModule,
     MatExpansionModule,
     MatSelectModule,
+    MatGridListModule,
     InfiniteScrollModule
   ],
   providers: [],

@@ -3,6 +3,7 @@ import { QueryRef } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { AniQueryService } from '../../shared/ani-query.service';
 import { ActivatedRoute, Router, NavigationEnd, ParamMap } from '@angular/router';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-voice-actor-detail',
@@ -17,6 +18,7 @@ export class VoiceActorDetailComponent implements OnInit {
   animeCharacters: any[];
   page:any;
   voiceActor: any;
+  description:String;
   loading: boolean;
   isLastPage:boolean;
   isDifferentAnime:boolean;
@@ -71,6 +73,8 @@ export class VoiceActorDetailComponent implements OnInit {
         this.loading = loading;
         this.page=data.Staff.characters.pageInfo.currentPage;
         this.voiceActor=data.Staff;
+        //parse description
+        //this.description = data.Staff.description;
         this.isLastPage=!data.Staff.characters.pageInfo.hasNextPage;
         console.log(this.page);
         if(!this.isDifferentAnime){

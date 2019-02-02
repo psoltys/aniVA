@@ -3,25 +3,25 @@
 [infiniteScrollThrottle]="50"
 [infiniteScrollDisabled]="isLastPage"
 (scrolled)="fetchMore(id)">
-<div>
+<div class="va-card">
     <mat-card>
         <img [src]='voiceActor.image.large' [title]='voiceActor.name.last' 
         [style.height.px]='imageWidth'>
-        {{voiceActor.name.first}} {{voiceActor.name.last}}
-        {{voiceActor.description}}
+        <h1>{{voiceActor.name.first}} {{voiceActor.name.last}} {{voiceActor.name.native}}</h1>
+        <div class="va-description" [innerHTML]="voiceActor.description"></div> 
     </mat-card>
  </div>
-<div class="card" *ngFor="let character of animeCharacters">
-   <mat-card>
-     <div class="char-card">
-     <div>
+
+<div class="card" >
+  <div class="container">
+  <mat-card   *ngFor="let character of animeCharacters">
+  <div   class="char-card" >
       <p> {{character.node.name.first}} {{character.node.name.last}} </p> 
       <p *ngIf="character.node.media.nodes[0]" > {{character.node.media.nodes[0].title.userPreferred}}</p> 
      <img [src]='character.node.image.medium' [title]='character.node.name.first' 
      [style.height.px]='imageWidth'>
    </div>
- </div>
-     <mat-expansion-panel>
+     <mat-expansion-panel *ngIf="character.node.media.nodes[1]">
        <mat-expansion-panel-header>
          <mat-panel-title>
            Titles
@@ -37,6 +37,6 @@
        
      </mat-expansion-panel>
    </mat-card>
-   
+  </div> 
 </div>
 </div>

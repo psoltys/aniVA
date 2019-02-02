@@ -3,8 +3,9 @@
  [infiniteScrollThrottle]="50"
  [infiniteScrollDisabled]="isLastPage"
  (scrolled)="fetchMore(id)">
- <div class="card" *ngFor="let character of animeCharacters">
-    <mat-card>
+ <div class="card" >
+    <div class="container">
+    <mat-card *ngFor="let character of animeCharacters">
       <div class="char-card">
       <div>
       <img [src]='character.node.image.medium' [title]='character.node.name.first' 
@@ -18,7 +19,7 @@
       [style.margin.px]='imageMargin'> 
     </div>
   </div>
-      <mat-expansion-panel>
+      <mat-expansion-panel *ngIf="character.voiceActors[1]">
         <mat-expansion-panel-header>
           <mat-panel-title>
             VAs
@@ -34,6 +35,7 @@
         
       </mat-expansion-panel>
     </mat-card>
+    </div>
     
 </div>
 </div>

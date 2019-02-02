@@ -38,7 +38,7 @@ query ($id: Int, $page: Int) {
       last
       native
     }
-    description
+    description(asHtml:true)
     image {
       large
       medium

@@ -1,9 +1,9 @@
- <div infiniteScroll
+ <div >
+ <div class="card" infiniteScroll
  [infiniteScrollDistance]="1"
  [infiniteScrollThrottle]="50"
- [infiniteScrollDisabled]="isLastPage"
- (scrolled)="fetchMore(id)">
- <div class="card" >
+ [infiniteScrollDisabled]="isLastPage || querySubSet"
+ (scrolled)="fetchMore(id)"  >
     <div class="container">
     <mat-card *ngFor="let character of animeCharacters">
       <div class="char-card">
@@ -12,11 +12,12 @@
       [style.height.px]='imageWidth'> 
       {{character.node.name.first}} {{character.node.name.last}} 
     </div>
-    <div *ngIf="character.voiceActors[0]">
+    <div style="cursor: pointer;" (click)="onVaClicked(character.voiceActors[0])" *ngIf="character.voiceActors[0]"> 
       {{character.voiceActors[0].name.first}} {{character.voiceActors[0].name.last}}
       <img [src]='character.voiceActors[0].image.medium' [title]='character.voiceActors[0].name.first'
       [style.height.px]='imageWidth'
-      [style.margin.px]='imageMargin'> 
+      [style.margin.px]='imageMargin'
+      > 
     </div>
   </div>
       <mat-expansion-panel *ngIf="character.voiceActors[1]">

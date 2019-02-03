@@ -20,6 +20,7 @@ export class AnimeDetailSearchComponent implements OnInit {
   page:any;
   loading: boolean;
   isLastPage:boolean;
+  querySubSet:boolean =true;
   isDifferentAnime:boolean;
   id: string;
   title: string;
@@ -72,7 +73,8 @@ export class AnimeDetailSearchComponent implements OnInit {
         this.loading = loading;
         this.page=data.Media.characters.pageInfo.currentPage;
         this.isLastPage=!data.Media.characters.pageInfo.hasNextPage;
-        console.log(this.page);
+        console.log("page not fetchmore:" + this.page);
+        this.querySubSet = false;
         if(!this.isDifferentAnime){
           this.animeCharacters=[...this.animeCharacters, ...data.Media.characters.edges]
         }
@@ -84,7 +86,12 @@ export class AnimeDetailSearchComponent implements OnInit {
 
   fetchMore(animeID: any) {
     this.isDifferentAnime=false;
-    console.log("page : "+ this.page)
+    console.log("page fetch more : "+ this.page)
     console.log(this.animeService.fetchMore(animeID, this.page+1));
   }
+
+  onVaClicked(message: any): void{
+    let id = message.id;
+    this.router.navigate(['voiceactor', id]);
+}
 }

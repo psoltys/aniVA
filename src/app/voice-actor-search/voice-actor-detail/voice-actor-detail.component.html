@@ -17,7 +17,9 @@
   <mat-card   *ngFor="let character of animeCharacters">
   <div   class="char-card" >
       <p> {{character.node.name.first}} {{character.node.name.last}} </p> 
-      <p *ngIf="character.node.media.nodes[0]" > {{character.node.media.nodes[0].title.userPreferred}}</p> 
+      <p style="cursor: pointer;" (click)="onTitleClicked(character.node.media.nodes[0])"
+       *ngIf="character.node.media.nodes[0]" >
+        {{character.node.media.nodes[0].title.userPreferred}}</p> 
      <img [src]='character.node.image.medium' [title]='character.node.name.first' 
      [style.height.px]='imageWidth'>
    </div>

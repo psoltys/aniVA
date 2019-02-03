@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { AniQueryService } from '../../shared/ani-query.service';
 import { ActivatedRoute, Router, NavigationEnd, ParamMap } from '@angular/router';
 import {MatGridListModule} from '@angular/material/grid-list';
-
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 @Component({
   selector: 'app-voice-actor-detail',
   templateUrl: './voice-actor-detail.component.html',
@@ -26,7 +26,7 @@ export class VoiceActorDetailComponent implements OnInit {
   title: string;
   imageWidth: number = 150;
   imageMargin: number = 0;
-  
+
   constructor(private animeService: AniQueryService,
     private route: ActivatedRoute,
     private router: Router) {
@@ -91,4 +91,9 @@ export class VoiceActorDetailComponent implements OnInit {
     console.log("page : "+ this.page)
     console.log(this.animeService.fetchMore(animeID, this.page+1));
   }
+  
+  onTitleClicked(message: any): void{
+    let id = message.id;
+    this.router.navigate(['anime', id]);
+}
 }

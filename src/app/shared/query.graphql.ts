@@ -106,6 +106,7 @@ query ($id: Int, $page: Int) {
         }
         voiceActors(sort:LANGUAGE) {
           language
+          id
           name {
             first
             last

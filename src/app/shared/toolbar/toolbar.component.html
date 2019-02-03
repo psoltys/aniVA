@@ -1,14 +1,14 @@
-<mat-toolbar >
+<mat-toolbar class = "app-toolbar">
 <mat-toolbar-row>
     <a class='nav-link' [routerLink]="['/home']">AniVA</a>
     <div class="button-row">
     <a mat-flat-button color="primary" (click)='setSearch("anime")'>Anime Search</a>
     <a mat-flat-button color="primary"  (click)='setSearch("va")'>Voice Actor Search</a>
     </div>
-    <div *ngIf="animeSearch" style="margin-left:auto;margin-right:auto;">
+    <div *ngIf="animeSearch" style="margin-left:auto;margin-right:auto;height:inherit;">
         <app-anime-search></app-anime-search>
     </div>
-    <div *ngIf="vaSearch" style="margin-left:auto;margin-right:auto;">
+    <div *ngIf="vaSearch" style="margin-left:auto;margin-right:auto;height:inherit;">
         <app-voice-actor-search></app-voice-actor-search>
     </div>
    </mat-toolbar-row>
